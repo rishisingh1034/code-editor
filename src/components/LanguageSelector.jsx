@@ -30,7 +30,7 @@ const LanguageSelector = ({language,onSelect}) => {
             onClick={() => onSelect(lang)}
             >{lang}
             &nbsp;
-            <Text as="span" color="gray.600" fontSize='sm'>{version}</Text>
+            <Text as="span" color="gray.600" fontSize='sm'>({version})</Text>
             </MenuItem>
         ))
     }
