@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { Box, Button, Text, useToast } from "@chakra-ui/react";
 import { executeCode } from "../api";
 
 const Output = ({ editorRef, language }) => {
-  const toast = useToast();
   const [output, setOutput] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -18,44 +16,31 @@ const Output = ({ editorRef, language }) => {
       result.stderr ? setIsError(true) : setIsError(false);
     } catch (error) {
       console.log(error);
-      toast({
-        title: "An error occurred.",
-        description: error.message || "Unable to run code",
-        status: "error",
-        duration: 6000,
-      });
+      alert(error.message || "Unable to run code");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <Box w="50%">
-      <Text mb={2} fontSize="lg">
-        Output
-      </Text>
-      <Button
-        variant="outline"
-        colorScheme="green"
-        mb={4}
-        isLoading={isLoading}
+    <div className="w-1/2">
+      <p className="mb-2 text-lg">Output</p>
+      <button
+        className={`mb-4 px-4 py-2 border rounded ${isLoading ? 'cursor-wait bg-gray-300' : 'bg-green-500 text-white'}`}
         onClick={runCode}
+        disabled={isLoading}
       >
-        Run Code
-      </Button>
-      <Box
-        height="75vh"
-        p={2}
-        color={isError ? "red.400" : ""}
-        border="1px solid"
-        borderRadius={4}
-        borderColor={isError ? "red.500" : "#333"}
+        {isLoading ? 'Running...' : 'Run Code'}
+      </button>
+      <div
+        className={`h-[86%] p-2 border ${isError ? 'border-red-500 text-red-400' : 'border-gray-800'}`}
       >
         {output
-          ? output.map((line, i) => <Text key={i}>{line}</Text>)
+          ? output.map((line, i) => <p key={i}>{line}</p>)
           : 'Click "Run Code" to see the output here'}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
+
 export default Output;

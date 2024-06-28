@@ -1,15 +1,13 @@
-import { Box, HStack } from '@chakra-ui/react'
 import { Editor } from '@monaco-editor/react';
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react';
 import LanguageSelector from './LanguageSelector';
 import { CODE_SNIPPETS } from '../constants';
 import Output from './Output';
 
-
 const CodeEditor = () => {
     const editorRef = useRef();
-    const [value,setValue] = useState("");
-    const [language,setLanguage] = useState("javascript");
+    const [value, setValue] = useState("");
+    const [language, setLanguage] = useState("javascript");
 
     const onMount = (editor) => {
         editorRef.current = editor;
@@ -17,27 +15,30 @@ const CodeEditor = () => {
     }
 
     const onSelect = (language) => {
-      setLanguage(language);
-      setValue(CODE_SNIPPETS[language])
+        setLanguage(language);
+        setValue(CODE_SNIPPETS[language]);
     }
 
-  return (
-    <Box>
-      <HStack spacing={4}>
-        <Box w="50%">
-        <LanguageSelector language = {language} onSelect= {onSelect}/>
-     <Editor height="75vh"
-     theme='vs-dark'
-     language={language} defaultValue={CODE_SNIPPETS[language]}
-     onMount={onMount}
-     value={value}
-     onChange={(value) => setValue(value)}
-     />;
-        </Box>
-        <Output editorRef={editorRef} language={language}/>
-      </HStack>
-    </Box>
-  )
+    return (
+        <div className="flex flex-col lg:flex-row h-full gap-6">
+            <div className="w-full lg:w-1/2 flex flex-col relative">
+                <LanguageSelector language={language} onSelect={onSelect} />
+                <div className="flex-grow">
+                    <Editor
+                        height="75vh"
+                        theme="vs-dark"
+                        language={language}
+                        defaultValue={CODE_SNIPPETS[language]}
+                        onMount={onMount}
+                        value={value}
+                        onChange={(value) => setValue(value)}
+                        className="border border-gray-300 rounded"
+                    />
+                </div>
+            </div>
+            <Output editorRef={editorRef} language={language} className="w-full lg:w-1/2" />
+        </div>
+    );
 }
 
 export default CodeEditor;
